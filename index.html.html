@@ -1,0 +1,555 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>نموذج بيانات الفريلانسرز</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        
+        body {
+            background: linear-gradient(135deg, #6a11cb 0%, #2575fc 100%);
+            color: #333;
+            padding: 20px;
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+        
+        .container {
+            width: 100%;
+            max-width: 900px;
+            background: white;
+            border-radius: 15px;
+            box-shadow: 0 15px 30px rgba(0, 0, 0, 0.2);
+            overflow: hidden;
+        }
+        
+        .header {
+            background: #4a6fc7;
+            color: white;
+            padding: 25px;
+            text-align: center;
+        }
+        
+        .header h1 {
+            font-size: 28px;
+            margin-bottom: 10px;
+        }
+        
+        .header p {
+            font-size: 16px;
+            opacity: 0.9;
+        }
+        
+        .form-container {
+            padding: 30px;
+        }
+        
+        .form-section {
+            margin-bottom: 25px;
+            padding-bottom: 20px;
+            border-bottom: 1px solid #eee;
+        }
+        
+        .form-section h2 {
+            color: #4a6fc7;
+            margin-bottom: 20px;
+            font-size: 20px;
+            display: flex;
+            align-items: center;
+        }
+        
+        .form-section h2 i {
+            margin-left: 10px;
+        }
+        
+        .form-group {
+            margin-bottom: 20px;
+        }
+        
+        label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 600;
+            color: #444;
+        }
+        
+        input, select, textarea {
+            width: 100%;
+            padding: 14px;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            font-size: 16px;
+            transition: border 0.3s;
+        }
+        
+        input:focus, select:focus, textarea:focus {
+            outline: none;
+            border-color: #4a6fc7;
+            box-shadow: 0 0 0 2px rgba(74, 111, 199, 0.2);
+        }
+        
+        textarea {
+            min-height: 120px;
+            resize: vertical;
+        }
+        
+        .notes-textarea {
+            min-height: 100px;
+        }
+        
+        .file-upload {
+            border: 2px dashed #4a6fc7;
+            padding: 20px;
+            text-align: center;
+            border-radius: 8px;
+            background-color: #f8f9fa;
+            cursor: pointer;
+            transition: background 0.3s;
+            margin-bottom: 20px;
+        }
+        
+        .file-upload:hover {
+            background-color: #e9ecef;
+        }
+        
+        .file-upload i {
+            font-size: 40px;
+            color: #4a6fc7;
+            margin-bottom: 10px;
+        }
+        
+        .file-upload p {
+            color: #666;
+            margin-bottom: 5px;
+        }
+        
+        .file-upload span {
+            color: #888;
+            font-size: 14px;
+        }
+        
+        button {
+            background: #4a6fc7;
+            color: white;
+            border: none;
+            padding: 15px 25px;
+            font-size: 18px;
+            border-radius: 8px;
+            cursor: pointer;
+            width: 100%;
+            transition: background 0.3s;
+            font-weight: 600;
+            margin-top: 10px;
+        }
+        
+        button:hover {
+            background: #3b5aa6;
+        }
+        
+        .required::after {
+            content: " *";
+            color: #e74c3c;
+        }
+        
+        .gallery-container {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+            gap: 15px;
+            margin-top: 20px;
+        }
+        
+        .image-preview {
+            position: relative;
+            border-radius: 8px;
+            overflow: hidden;
+            box-shadow: 0 3px 10px rgba(0, 0, 0, 0.1);
+            height: 150px;
+        }
+        
+        .image-preview img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+        
+        .image-preview .delete-btn {
+            position: absolute;
+            top: 5px;
+            left: 5px;
+            background: rgba(231, 76, 60, 0.8);
+            color: white;
+            border: none;
+            border-radius: 50%;
+            width: 25px;
+            height: 25px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        
+        .upload-status {
+            margin-top: 10px;
+            padding: 10px;
+            border-radius: 8px;
+            background-color: #f8f9fa;
+            text-align: center;
+            font-size: 14px;
+        }
+        
+        .upload-status.error {
+            background-color: #ffecec;
+            color: #e74c3c;
+        }
+        
+        .upload-status.success {
+            background-color: #ecf7ee;
+            color: #2ecc71;
+        }
+        
+        .optional-note {
+            font-size: 14px;
+            color: #666;
+            font-style: italic;
+            margin-top: 5px;
+        }
+        
+        .mandatory-images {
+            color: #e74c3c;
+            font-weight: bold;
+        }
+        
+        @media (max-width: 768px) {
+            .container {
+                border-radius: 10px;
+            }
+            
+            .header {
+                padding: 20px;
+            }
+            
+            .header h1 {
+                font-size: 24px;
+            }
+            
+            .form-container {
+                padding: 20px;
+            }
+            
+            .gallery-container {
+                grid-template-columns: repeat(auto-fill, minmax(120px, 1fr));
+            }
+            
+            .image-preview {
+                height: 120px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1><i class="fas fa-user-tie"></i> نموذج بيانات الفريلانسرز</h1>
+            <p>نموذج لجمع معلومات الفريلانسرز والخبرات والخدمات المقدمة</p>
+        </div>
+        
+        <div class="form-container">
+            <form id="freelancerForm">
+                <div class="form-section">
+                    <h2><i class="fas fa-user"></i> المعلومات الشخصية</h2>
+                    
+                    <div class="form-group">
+                        <label for="fullname" class="required">الاسم بالكامل</label>
+                        <input type="text" id="fullname" name="fullname" required placeholder="أدخل اسمك بالكامل">
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="email" class="required">البريد الإلكتروني</label>
+                        <input type="email" id="email" name="email" required placeholder="example@domain.com">
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="phone">رقم الهاتف</label>
+                        <input type="tel" id="phone" name="phone" placeholder="ادخل رقم هاتفك">
+                    </div>
+                </div>
+                
+                <div class="form-section">
+                    <h2><i class="fas fa-briefcase"></i> المعلومات المهنية</h2>
+                    
+                    <div class="form-group">
+                        <label for="field" class="required">المجال</label>
+                        <select id="field" name="field" required>
+                            <option value="">اختر مجال عملك</option>
+                            <option value="design">تصميم جرافيك</option>
+                            <option value="programming">برمجة وتطوير مواقع</option>
+                            <option value="writing">كتابة المحتوى</option>
+                            <option value="marketing">التسويق الإلكتروني</option>
+                            <option value="translation">الترجمة</option>
+                            <option value="video">تصميم فيديو ومونتاج</option>
+                            <option value="other">مجال آخر</option>
+                        </select>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="experience" class="required">عدد سنوات الخبرة</label>
+                        <input type="number" id="experience" name="experience" min="0" max="50" required placeholder="عدد سنوات الخبرة">
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="skills" class="required">المهارات</label>
+                        <textarea id="skills" name="skills" required placeholder="اذكر مهاراتك الرئيسية (مفصولة بفواصل)"></textarea>
+                    </div>
+                </div>
+                
+                <div class="form-section">
+                    <h2><i class="fas fa-tags"></i> الخدمات والأسعار</h2>
+                    
+                    <div class="form-group">
+                        <label for="service" class="required">الخدمة المقدمة</label>
+                        <input type="text" id="service" name="service" required placeholder="وصف الخدمة التي تقدمها">
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="price" class="required">سعر الخدمة (بالدولار)</label>
+                        <input type="number" id="price" name="price" min="1" step="0.01" required placeholder="السعر">
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="revisions" class="required">نظام التعديلات</label>
+                        <textarea id="revisions" name="revisions" required placeholder="عدد التعديلات المسموح بها ونظام التعديلات الخاص بك"></textarea>
+                    </div>
+                </div>
+                
+                <div class="form-section">
+                    <h2><i class="fas fa-images"></i> معرض الأعمال <span class="mandatory-images">(إجباري)</span></h2>
+                    
+                    <div class="form-group">
+                        <label for="portfolio" class="required">رفع صور لأعمال سابقة (حتى 10 صور)</label>
+                        <div class="file-upload" id="uploadArea">
+                            <i class="fas fa-cloud-upload-alt"></i>
+                            <p>انقر أو اسحب الملفات هنا لرفعها</p>
+                            <span>الحجم الأقصى للملف: 5MB (PNG, JPG)</span>
+                            <input type="file" id="portfolio" name="portfolio" accept=".jpg,.jpeg,.png" multiple style="display: none;" required>
+                        </div>
+                        
+                        <div class="upload-status" id="uploadStatus">
+                            لم يتم رفع أي صور بعد
+                        </div>
+                        
+                        <div class="gallery-container" id="imageGallery">
+                            <!-- سيتم إضافة معاينات الصور هنا عبر الجافاسكريبت -->
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- قسم الملاحظات -->
+                <div class="form-section">
+                    <h2><i class="fas fa-sticky-note"></i> ملاحظات إضافية</h2>
+                    
+                    <div class="form-group">
+                        <label for="notes">ملاحظات إضافية</label>
+                        <textarea id="notes" name="notes" class="notes-textarea" placeholder="إذا كان لديك أي ملاحظات إضافية أو معلومات تريد إضافتها، يمكنك كتابتها هنا..."></textarea>
+                        <p class="optional-note">هذه الخانة اختيارية وليست إلزامية</p>
+                    </div>
+                </div>
+                
+                <button type="submit"><i class="fas fa-paper-plane"></i> إرسال البيانات</button>
+            </form>
+        </div>
+    </div>
+
+    <script>
+        // متغيرات لتخزين الصور المرفوعة
+        let uploadedImages = [];
+        const maxImages = 10;
+        const minImages = 1; // الحد الأدنى للصور المطلوبة
+        
+        // جعل منطقة رفع الملفات قابلة للنقر
+        document.getElementById('uploadArea').addEventListener('click', function() {
+            document.getElementById('portfolio').click();
+        });
+        
+        // إدارة عملية رفع الملفات
+        document.getElementById('portfolio').addEventListener('change', function(e) {
+            const files = e.target.files;
+            const statusElement = document.getElementById('uploadStatus');
+            
+            if (files.length === 0) return;
+            
+            // التحقق من عدم تجاوز الحد الأقصى للصور
+            if (uploadedImages.length + files.length > maxImages) {
+                statusElement.textContent = `❌ يمكنك رفع ${maxImages} صور كحد أقصى فقط`;
+                statusElement.className = 'upload-status error';
+                return;
+            }
+            
+            let validFiles = [];
+            
+            // التحقق من كل ملف
+            for (let i = 0; i < files.length; i++) {
+                const file = files[i];
+                
+                // التحقق من نوع الملف
+                if (!file.type.match('image/jpeg') && !file.type.match('image/png')) {
+                    statusElement.textContent = '❌ نوع الملف غير مدعوم. يرجى رفع صور بصيغة JPG أو PNG فقط';
+                    statusElement.className = 'upload-status error';
+                    continue;
+                }
+                
+                // التحقق من حجم الملف
+                if (file.size > 5 * 1024 * 1024) {
+                    statusElement.textContent = '❌ حجم الملف كبير جداً. الحد الأقصى هو 5MB';
+                    statusElement.className = 'upload-status error';
+                    continue;
+                }
+                
+                validFiles.push(file);
+            }
+            
+            // معالجة الملفات الصالحة
+            if (validFiles.length > 0) {
+                processFiles(validFiles);
+                const remainingSlots = maxImages - uploadedImages.length;
+                statusElement.textContent = `✅ تم رفع ${validFiles.length} صور. يمكنك رفع ${remainingSlots} صور إضافية`;
+                statusElement.className = 'upload-status success';
+                
+                // إزالة حالة الخطأ إذا كانت موجودة
+                document.getElementById('uploadArea').style.borderColor = '#4a6fc7';
+            }
+            
+            // مسح قيمة المدخل للسماح برفع نفس الملف مرة أخرى إذا لزم الأمر
+            e.target.value = '';
+        });
+        
+        // معالجة الملفات وعرض معايناتها
+        function processFiles(files) {
+            const galleryElement = document.getElementById('imageGallery');
+            
+            for (const file of files) {
+                const reader = new FileReader();
+                
+                reader.onload = function(e) {
+                    // إنشاء عنصر معاينة الصورة
+                    const imagePreview = document.createElement('div');
+                    imagePreview.className = 'image-preview';
+                    
+                    const image = document.createElement('img');
+                    image.src = e.target.result;
+                    image.alt = file.name;
+                    
+                    const deleteBtn = document.createElement('button');
+                    deleteBtn.className = 'delete-btn';
+                    deleteBtn.innerHTML = '<i class="fas fa-times"></i>';
+                    deleteBtn.onclick = function() {
+                        // إزالة الصورة من المعرض والمصفوفة
+                        const index = uploadedImages.indexOf(file);
+                        if (index > -1) {
+                            uploadedImages.splice(index, 1);
+                        }
+                        imagePreview.remove();
+                        
+                        // تحديث حالة الرفع
+                        const remainingSlots = maxImages - uploadedImages.length;
+                        const statusElement = document.getElementById('uploadStatus');
+                        
+                        if (uploadedImages.length === 0) {
+                            statusElement.textContent = 'لم يتم رفع أي صور بعد';
+                            statusElement.className = 'upload-status';
+                            document.getElementById('uploadArea').style.borderColor = '#e74c3c';
+                        } else {
+                            statusElement.textContent = `تم حذف الصورة. يمكنك رفع ${remainingSlots} صور إضافية`;
+                            statusElement.className = 'upload-status success';
+                        }
+                    };
+                    
+                    imagePreview.appendChild(image);
+                    imagePreview.appendChild(deleteBtn);
+                    galleryElement.appendChild(imagePreview);
+                    
+                    // إضافة الملف إلى المصفوفة
+                    uploadedImages.push(file);
+                };
+                
+                reader.readAsDataURL(file);
+            }
+        }
+        
+        // التحقق من النموذج قبل الإرسال
+        document.getElementById('freelancerForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            
+            // التحقق من وجود صور مرفوعة
+            if (uploadedImages.length < minImages) {
+                const statusElement = document.getElementById('uploadStatus');
+                statusElement.textContent = '❌ يجب رفع至少 صورة واحدة على الأقل';
+                statusElement.className = 'upload-status error';
+                
+                document.getElementById('uploadArea').style.borderColor = '#e74c3c';
+                
+                alert('يجب رفع至少 صورة واحدة لأعمالك السابقة قبل إرسال النموذج');
+                return;
+            }
+            
+            // جمع البيانات من النموذج
+            const formData = {
+                name: document.getElementById('fullname').value,
+                email: document.getElementById('email').value,
+                phone: document.getElementById('phone').value,
+                field: document.getElementById('field').value,
+                experience: document.getElementById('experience').value,
+                skills: document.getElementById('skills').value,
+                service: document.getElementById('service').value,
+                price: document.getElementById('price').value,
+                revisions: document.getElementById('revisions').value,
+                notes: document.getElementById('notes').value,
+                imagesCount: uploadedImages.length
+            };
+            
+            alert('تم حفظ البيانات بنجاح! في التطبيق الفعلي، سيتم إرسال البيانات والصور إلى الخادم.');
+            console.log('بيانات النموذج:', formData);
+        });
+        
+        // دعم سحب وإفلات الملفات
+        const uploadArea = document.getElementById('uploadArea');
+        
+        uploadArea.addEventListener('dragover', function(e) {
+            e.preventDefault();
+            uploadArea.style.background = '#e3e8f0';
+        });
+        
+        uploadArea.addEventListener('dragleave', function() {
+            uploadArea.style.background = '#f8f9fa';
+        });
+        
+        uploadArea.addEventListener('drop', function(e) {
+            e.preventDefault();
+            uploadArea.style.background = '#f8f9fa';
+            
+            // تشغيل حدث change على مدخل الملف
+            const files = e.dataTransfer.files;
+            const input = document.getElementById('portfolio');
+            input.files = files;
+            
+            //触发change事件
+            const event = new Event('change', { bubbles: true });
+            input.dispatchEvent(event);
+        });
+        
+        // إضافة تحقق عند تحميل الصفحة للتأكد من أن رفع الصور إجباري
+        document.addEventListener('DOMContentLoaded', function() {
+            // جعل حقل رفع الصور إلزاميًا
+            document.getElementById('portfolio').required = true;
+        });
+    </script>
+</body>
+</html>
